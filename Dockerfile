@@ -2,17 +2,17 @@ FROM python:3.8-slim
 
 WORKDIR /app
 
-# Install git + build tools (needed for pandas-profiling and spacy)
-RUN apt-get update && apt-get install -y git gcc && rm -rf /var/lib/apt/lists/*
+# Install build-essential for compiling C extensions (needed by spacy)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
 
-# Upgrade pip & friends
+# Upgrade pip, setuptools, wheel for better dependency resolution
 RUN pip install --upgrade pip setuptools wheel
 
-# Copy and install requirements (GitHub URL will be processed here)
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy your app and the model file
 COPY . .
 
 EXPOSE 8000
