@@ -6,3 +6,4 @@ pycaret==1.0.0
 pandas
 numpy
 spacy<3.0
+git+https://github.com/pandas-profiling/pandas-profiling.git@v2.3.0
