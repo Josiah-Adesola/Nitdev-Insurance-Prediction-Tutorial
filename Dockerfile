@@ -1,8 +1,8 @@
-FROM python:3.9-slim
+FROM python:3.8-slim
 
 WORKDIR /app
 
-# Upgrade pip, setuptools, and wheel first
+# Upgrade pip, setuptools, wheel to avoid dependency resolution issues
 RUN pip install --upgrade pip setuptools wheel
 
 COPY requirements.txt .
