@@ -1,17 +1,16 @@
-FROM python:3.8-slim
+FROM python:3.8
 
 WORKDIR /app
 
-# Install git (for the GitHub clone) AND g++ (C++ compiler)
-# We also keep the cleanup to keep the image small.
-RUN apt-get update && apt-get install -y git g++ && rm -rf /var/lib/apt/lists/*
+# Install build-essential for compiling C extensions (needed by spacy)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
 
-# Upgrade pip, setuptools, wheel to avoid dependency resolution issues
+# Upgrade pip, setuptools, wheel for better dependency resolution
 RUN pip install --upgrade pip setuptools wheel
 
 COPY requirements.txt .
-
-# This will now succeed because g++ is available to compile the C++ extensions
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
