@@ -2,19 +2,18 @@ FROM python:3.8-slim
 
 WORKDIR /app
 
-# 1️⃣ Install git (needed for the GitHub pip install) and a C compiler
-RUN apt-get update && apt-get install -y git gcc && rm -rf /var/lib/apt/lists/*
+# Install git (for the GitHub clone) AND g++ (C++ compiler)
+# We also keep the cleanup to keep the image small.
+RUN apt-get update && apt-get install -y git g++ && rm -rf /var/lib/apt/lists/*
 
-# 2️⃣ Upgrade pip, setuptools, wheel (optional but recommended)
+# Upgrade pip, setuptools, wheel to avoid dependency resolution issues
 RUN pip install --upgrade pip setuptools wheel
 
-# 3️⃣ Copy requirements.txt (this file contains the git+ line)
 COPY requirements.txt .
 
-# 4️⃣ Install all dependencies – git is now available
+# This will now succeed because g++ is available to compile the C++ extensions
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 5️⃣ Copy the rest of the application (including model file)
 COPY . .
 
 EXPOSE 8000
