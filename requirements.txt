@@ -2,8 +2,16 @@ fastapi==0.104.1
 uvicorn[standard]==0.24.0
 python-multipart==0.0.6
 jinja2==3.1.2
+
+# Pin these to versions compatible with scikit‑learn 0.22 and pycaret 1.0.0
+scikit-learn==0.22
+pandas==1.1.5
+numpy==1.19.5
+
 pycaret==1.0.0
-pandas
-numpy
+
+# spacy <3.0 is required by pycaret 1.0.0
 spacy<3.0
+
+# Install pandas‑profiling 2.3.0 directly from GitHub (no longer on PyPI)
 git+https://github.com/pandas-profiling/pandas-profiling.git@v2.3.0
