@@ -20,7 +20,7 @@
     {% if prediction is defined %}
     <section class="result" role="status">
       <span class="result__label">Estimated Charge</span>
-      <span class="result__value">${{ "{:,}".format(prediction) }}</span>
+      <span class="result__value">₦{{ "{:,}".format(prediction) }}</span>
     </section>
     {% endif %}
 
@@ -28,8 +28,9 @@
     <form action="/predict" method="POST" class="predict-form">
       <div class="field">
         <label for="age">Age</label>
-        <input id="age" type="number" name="age" min="0" max="120" placeholder="e.g. 34"
+        <input id="age" type="number" name="age" min="18" max="100" placeholder="e.g. 34"
           value="{{ form.age if form is defined else '' }}" required>
+        <span class="hint">Whole years, 18–100</span>
       </div>
 
       <div class="field">
@@ -39,18 +40,21 @@
           <option value="male" {{ 'selected' if form is defined and form.sex == 'male' }}>Male</option>
           <option value="female" {{ 'selected' if form is defined and form.sex == 'female' }}>Female</option>
         </select>
+        <span class="hint">As recorded on the policy</span>
       </div>
 
       <div class="field">
         <label for="bmi">BMI</label>
-        <input id="bmi" type="number" name="bmi" step="0.1" min="0" max="80" placeholder="e.g. 27.9"
+        <input id="bmi" type="number" name="bmi" step="0.1" min="10" max="60" placeholder="e.g. 27.9"
           value="{{ form.bmi if form is defined else '' }}" required>
+        <span class="hint">Body Mass Index, e.g. 18.5–40</span>
       </div>
 
       <div class="field">
         <label for="children">Children</label>
-        <input id="children" type="number" name="children" min="0" max="20" placeholder="e.g. 2"
+        <input id="children" type="number" name="children" min="0" max="10" placeholder="e.g. 2"
           value="{{ form.children if form is defined else '' }}" required>
+        <span class="hint">Number of dependents, 0–10</span>
       </div>
 
       <div class="field">
@@ -60,6 +64,7 @@
           <option value="yes" {{ 'selected' if form is defined and form.smoker == 'yes' }}>Yes</option>
           <option value="no" {{ 'selected' if form is defined and form.smoker == 'no' }}>No</option>
         </select>
+        <span class="hint">Currently a smoker?</span>
       </div>
 
       <div class="field">
@@ -71,6 +76,7 @@
           <option value="northwest" {{ 'selected' if form is defined and form.region == 'northwest' }}>Northwest</option>
           <option value="northeast" {{ 'selected' if form is defined and form.region == 'northeast' }}>Northeast</option>
         </select>
+        <span class="hint">US residential region</span>
       </div>
 
       <button type="submit" class="btn-predict">Predict</button>
