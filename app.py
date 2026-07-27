@@ -116,7 +116,11 @@ def predict(
     prediction = run_prediction(data)
     return templates.TemplateResponse(
         "home.html",
-        {"request": request, "pred": f"Expected Bill will be {round(prediction)}"},
+        {
+            "request": request,
+            "prediction": round(prediction),
+            "form": data,
+        },
     )
 
 

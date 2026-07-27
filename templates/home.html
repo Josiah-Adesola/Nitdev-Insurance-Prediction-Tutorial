@@ -1,40 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Predict Insurance Bill</title>
-  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
-<!-- FastAPI's StaticFiles mount serves this folder directly at /static -->
-<link type="text/css" rel="stylesheet" href="/static/style.css">
-  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- FastAPI's StaticFiles mount serves this folder directly at /static -->
+  <link type="text/css" rel="stylesheet" href="/static/style.css">
 </head>
 
 <body>
- <div class="login">
-	<h1>Predict Insurance Bill</h1>
+  <main class="card">
+    <header class="card__header">
+      <h1>Insurance Bill Predictor</h1>
+      <p class="subtitle">Estimate expected medical insurance charges from a few customer details.</p>
+    </header>
 
-     <!-- Form to enter new data for predictions  -->
+    {% if prediction is defined %}
+    <section class="result" role="status">
+      <span class="result__label">Estimated Charge</span>
+      <span class="result__value">${{ "{:,}".format(prediction) }}</span>
+    </section>
+    {% endif %}
+
     <!-- Flask's url_for() is gone - FastAPI routes are just plain paths -->
-    <form action="/predict" method="POST">
-      <input type="text" name="age" placeholder="Age" required="required" /><br>
-    	<input type="text" name="sex" placeholder="Sex" required="required" /><br>
-        <input type="text" name="bmi" placeholder="BMI" required="required" /><br>
-        <input type="text" name="children" placeholder="Children" required="required" /><br>
-        <input type="text" name="smoker" placeholder="Smoker" required="required" /><br>
-        <input type="text" name="region" placeholder="Region" required="required" /><br>
+    <form action="/predict" method="POST" class="predict-form">
+      <div class="field">
+        <label for="age">Age</label>
+        <input id="age" type="number" name="age" min="0" max="120" placeholder="e.g. 34"
+          value="{{ form.age if form is defined else '' }}" required>
+      </div>
 
-        <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
+      <div class="field">
+        <label for="sex">Sex</label>
+        <select id="sex" name="sex" required>
+          <option value="" disabled {{ 'selected' if form is not defined }}>Select…</option>
+          <option value="male" {{ 'selected' if form is defined and form.sex == 'male' }}>Male</option>
+          <option value="female" {{ 'selected' if form is defined and form.sex == 'female' }}>Female</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="bmi">BMI</label>
+        <input id="bmi" type="number" name="bmi" step="0.1" min="0" max="80" placeholder="e.g. 27.9"
+          value="{{ form.bmi if form is defined else '' }}" required>
+      </div>
+
+      <div class="field">
+        <label for="children">Children</label>
+        <input id="children" type="number" name="children" min="0" max="20" placeholder="e.g. 2"
+          value="{{ form.children if form is defined else '' }}" required>
+      </div>
+
+      <div class="field">
+        <label for="smoker">Smoker</label>
+        <select id="smoker" name="smoker" required>
+          <option value="" disabled {{ 'selected' if form is not defined }}>Select…</option>
+          <option value="yes" {{ 'selected' if form is defined and form.smoker == 'yes' }}>Yes</option>
+          <option value="no" {{ 'selected' if form is defined and form.smoker == 'no' }}>No</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="region">Region</label>
+        <select id="region" name="region" required>
+          <option value="" disabled {{ 'selected' if form is not defined }}>Select…</option>
+          <option value="southwest" {{ 'selected' if form is defined and form.region == 'southwest' }}>Southwest</option>
+          <option value="southeast" {{ 'selected' if form is defined and form.region == 'southeast' }}>Southeast</option>
+          <option value="northwest" {{ 'selected' if form is defined and form.region == 'northwest' }}>Northwest</option>
+          <option value="northeast" {{ 'selected' if form is defined and form.region == 'northeast' }}>Northeast</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn-predict">Predict</button>
     </form>
-
-   <br>
-   <br>
-  
-   
- </div>
- {{pred}}
-
+  </main>
 </body>
 </html>
